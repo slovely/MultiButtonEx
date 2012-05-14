@@ -1,0 +1,27 @@
+﻿@using MultiButtonEx.Web
+@model MultiButtonEx.Web.Models.Home.DummyModel
+
+@using (Html.BeginForm())
+{
+
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Other</th>
+            <th>Actions</th>
+        </tr>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Other</td>
+                <td>
+                    <input type="submit" name="PerformAction_id:@(item.Id)_other:@(item.Other)" value="PerformAction" />
+                    <input type="submit" name="PerformAnActionWithType_id:@(item.Id)_other:@(item.Other)" value="PerformAction2" />
+                    @Html.MultiButtonEx(new {id = item.Id, other = item.Other}, "PerformActionRenderedWithHelper", "PerformAction3")
+                </td>
+            </tr>
+        }
+    
+    </table>
+}
