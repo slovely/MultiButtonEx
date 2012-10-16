@@ -26,9 +26,8 @@ namespace MultiButtonEx.Web
     {
         public MultiButtonExAttribute(string matchFormKeyBeginningWith)
         {
-            MatchFormKeyBeginningWith = matchFormKeyBeginningWith;
+            MatchFormKeyBeginningWith = EnsureEndsWithUnderscore(matchFormKeyBeginningWith);
         }
-
 
         public string MatchFormKeyBeginningWith { get; set; }
 
@@ -36,7 +35,7 @@ namespace MultiButtonEx.Web
         {
             foreach (var key in controllerContext.HttpContext.Request.Params.Keys.Cast<string>())
             {
-                if (key.StartsWith(MatchFormKeyBeginningWith + "_"))
+                if (key.StartsWith(MatchFormKeyBeginningWith))
                 {
                     AddValuesToRouteDataForBinding(controllerContext, key);
                     return true;
@@ -55,6 +54,13 @@ namespace MultiButtonEx.Web
                 var parts = keyValuePair.Split(':');
                 controllerContext.RequestContext.RouteData.Values.Add(parts[0], parts[1]);
             }
+        }
+
+        private string EnsureEndsWithUnderscore(string matchFormKeyBeginningWith)
+        {
+            if (matchFormKeyBeginningWith.EndsWith("_"))
+                return matchFormKeyBeginningWith;
+            return matchFormKeyBeginningWith + "_";
         }
     }
 }
